@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>For You 💛</title>
+<style>
+body {
+  margin:0;
+  font-family:'Segoe UI',sans-serif;
+  overflow:hidden;
+  height:100vh;
+  color:white;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  perspective:1200px;
+  background:radial-gradient(circle at bottom,#1a002b,#000);
+  transition: background 2s ease-in-out;
+}
+body.tangled { animation: nightSky 12s ease-in-out infinite alternate; }
+
+@keyframes nightSky {
+  0% { background: radial-gradient(circle at bottom,#1a002b,#000);}
+  50% { background: radial-gradient(circle at bottom,#2a003f,#0a0015);}
+  100% { background: radial-gradient(circle at bottom,#1a002b,#000);}
+}
+
+/* Card styling */
+.card {
+  background: rgba(0,0,0,0.6);
+  padding: 30px;
+  border-radius: 28px;
+  width: 95%;
+  max-width:800px;
+  text-align: center;
+  z-index: 10;
+  box-shadow: 0 15px 35px rgba(0,0,0,0.7), 0 0 30px rgba(255,215,102,0.3) inset;
+  border: 3px solid rgba(255,215,102,0.7);
+  backdrop-filter: blur(8px);
+  animation: floatCard 6s ease-in-out infinite alternate;
+}
+@keyframes floatCard {
+  0% { transform: translateY(0px);}
+  50% { transform: translateY(-12px);}
+  100% { transform: translateY(0px);}
+}
+
+h1 { font-size:26px; margin-bottom:12px; }
+p { font-size:15px; opacity:0.9; }
+
+/* Folder */
+.folder {
+  background:#1db954;
+  color:black;
+  padding:18px;
+  border-radius:16px;
+  cursor:pointer;
+  font-weight:bold;
+  margin-top:20px;
+  box-shadow:0 5px 15px rgba(0,0,0,0.5);
+}
+.hidden { display:none; }
+
+ul { list-style:none; padding:0; font-size:16px; text-align:center; margin-top:10px; }
+ul li {
+  display:inline-block; margin:6px;
+  font-weight:bold; font-size:24px; color:#ffd166;
+  cursor:pointer; transition:0.3s;
+  text-shadow:0 0 5px #ffd166;
+}
+ul li:hover { text-shadow:0 0 15px #ffd166,0 0 25px #ffb703,0 0 35px #ff8c00; transform:scale(1.3);}
+ul li.active { color:purple; text-shadow:0 0 15px purple,0 0 25px #d1a2ff,0 0 35px #b06fff;}
+
+/* Buttons */
+.buttons {margin-top:15px; position:relative; height:50px;}
+button {padding:10px 18px; border:none; border-radius:20px; font-size:16px; cursor:pointer; box-shadow:0 5px 15px rgba(0,0,0,0.4);}
+.yes {background:#ffd166; color:black;}
+.no {background:#444; color:white; position:absolute; right:0;}
+#noMsg {margin-top:10px; font-size:14px; color:#ff8c00;}
+.spotify-player {margin-top:20px; border-radius:14px; overflow:hidden; height:120px;}
+#flowerContainer { position:absolute; left:0; bottom:0; width:100%; height:100vh; overflow:visible; pointer-events:none;}
+
+/* Lanterns */
+.lantern {
+  position:absolute;
+  bottom:-100px;
+  width:140px;
+  height:180px;
+  transform-style:preserve-3d;
+  opacity:0.95;
+  filter: drop-shadow(0 0 35px #ffd166);
+  animation: swayLantern linear infinite;
+}
+.lantern .body {
+  background: radial-gradient(circle at top,#fff6c7,#ffb703,#ff8c00);
+  border-radius:50% 50% 45% 45%;
+  box-shadow:0 0 80px rgba(255,183,3,0.9),0 0 140px rgba(255,140,0,0.6);
+  animation: flickerLantern 2s infinite;
+}
+.lantern .string { position:absolute; bottom:-20px; left:50%; width:3px; height:38px; background:#ffd166; transform:translateX(-50%); }
+
+@keyframes swayLantern {
+  0% { transform: translateY(0) rotateZ(0deg) scale(var(--s)); }
+  25% { transform: translateY(-35vh) rotateZ(4deg) scale(var(--s)); }
+  50% { transform: translateY(-70vh) rotateZ(-3deg) scale(var(--s)); }
+  75% { transform: translateY(-105vh) rotateZ(2deg) scale(var(--s)); }
+  100% { transform: translateY(-140vh) rotateZ(0deg) scale(var(--s)); }
+}
+
+@keyframes flickerLantern {
+  0%,100% { box-shadow:0 0 80px rgba(255,183,3,0.9),0 0 140px rgba(255,140,0,0.6);}
+  25% { box-shadow:0 0 100px rgba(255,200,50,1),0 0 150px rgba(255,140,0,0.8);}
+  50% { box-shadow:0 0 90px rgba(255,183,3,1),0 0 160px rgba(255,140,0,0.9);}
+  75% { box-shadow:0 0 100px rgba(255,220,60,1),0 0 155px rgba(255,150,0,0.85);}
+}
+
+/* Tulips floating */
+.tulip {
+  position:absolute; bottom:0; font-size:28px;
+  animation:floatTulip 6s ease-in-out forwards;
+  transform-origin:bottom center;
+}
+@keyframes floatTulip {
+  0% { transform:translateY(0) scale(1) rotate(0deg);}
+  50% { transform:translateY(-40vh) scale(1.1) rotate(5deg);}
+  100% { transform:translateY(-80vh) scale(1.3) rotate(-5deg);}
+}
+
+/* Tangled Flowers */
+.tangledFlower {
+  position:absolute; bottom:0; font-size:28px; color:#ffd700; animation:riseWaterFlower 8s ease-in forwards;
+}
+@keyframes riseWaterFlower {
+  0% {transform:translateY(0) scale(1) rotate(0deg); opacity:0;}
+  20% {opacity:1;}
+  50% {transform:translateY(-20vh) scale(1.1) rotate(10deg);}
+  80% {transform:translateY(-40vh) scale(1.3) rotate(-10deg);}
+  100% {transform:translateY(-50vh) scale(1.4) rotate(5deg); opacity:0;}
+}
+
+/* Glowing question mark */
+#questionMark {
+  font-size:36px;
+  color:#ffdd00;
+  text-shadow:0 0 10px #ffdd00, 0 0 20px #ffb703,0 0 30px #ff8c00;
+  cursor:pointer;
+  margin-left:10px;
+  transition: transform 0.3s;
+}
+#questionMark:hover { transform:scale(1.4) rotate(-10deg); }
+
+/* Photo gallery */
+#photoGallery {
+  margin-top:20px;
+  display:flex; flex-wrap:wrap; justify-content:center; gap:10px;
+}
+#photoGallery img {
+  width:120px; height:120px; object-fit:cover;
+  border-radius:16px; border:2px solid #ffd166;
+  box-shadow:0 5px 15px rgba(0,0,0,0.4);
+  transition:0.3s;
+}
+#photoGallery img:hover { transform:scale(1.2); box-shadow:0 0 25px #ffd166; }
+</style>
+</head>
+<body>
+<div class="card">
+  <div id="musicSection">
+    <h1>🎧 A song for you</h1>
+    <p>Open the folder first 💛</p>
+    <div class="folder" onclick="openMusic()">📁 Open Music</div>
+  </div>
+
+  <div id="valentineSection" class="hidden">
+    <h1>Hey, <span id="herName">Love</span> 🌻</h1>
+    <p>Click letters to play a song:</p>
+    <ul id="letters"></ul>
+    <span id="questionMark">?</span>
+    <div class="spotify-player" id="playerContainer">
+      <iframe id="spotifyPlayer" src="" width="100%" height="120" frameborder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe>
+    </div>
+    <div class="buttons">
+      <button class="yes" onclick="sayYes()">Yes 💛</button>
+      <button class="no" onmouseover="moveNo()">No 😅</button>
+      <div id="noMsg"></div>
+    </div>
+    <div id="response"></div>
+
+    <!-- Photo gallery -->
+    <div id="photoGallery"></div>
+  </div>
+</div>
+
+<div id="flowerContainer"></div>
+
+<script>
+// Lanterns cinematic
+function createCinematicLanterns(count=25){
+  for(let i=0;i<count;i++){
+    const lantern=document.createElement("div");
+    lantern.className="lantern tangled";
+    lantern.style.left=Math.random()*100+"vw";
+    lantern.style.animationDuration=(10 + Math.random()*7)+"s";
+    lantern.style.animationDelay=Math.random()*5+"s";
+    const zDepth=Math.random()*-700;
+    lantern.style.setProperty("--z",`${zDepth}px`);
+    const scale=0.8 + (Math.random()*1.2);
+    lantern.style.setProperty("--s",scale);
+    lantern.style.zIndex=Math.floor(1000+zDepth);
+    lantern.innerHTML=`<div class="body"></div><div class="string"></div>`;
+    document.body.appendChild(lantern);
+  }
+}
+
+// Letters and tulips
+const lettersData=[
+  {letter:'W',url:'https://open.spotify.com/embed/track/0lx2cLdOt3piJbcaXIV74f'},
+  {letter:'I',url:'https://open.spotify.com/embed/track/3lKZf71jeNi14udIFPJ29V'},
+  {letter:'L',url:'https://open.spotify.com/embed/track/3CeCwYWvdfXbZLXFhBrbnf'},
+  {letter:'L',url:'https://open.spotify.com/embed/track/5jQI2r1RdgtuT8S3iG8zFC'},
+  {letter:'Y',url:'https://open.spotify.com/embed/track/1qrpoAMXodY6895hGKoUpA'},
+  {letter:'O',url:'https://open.spotify.com/embed/track/0qUnBLZ8bJqUNEeQgayL9t'},
+  {letter:'U',url:'https://open.spotify.com/embed/track/0tQ9vBYpldCuikPsbgOVKA'},
+  {letter:'B',url:'https://open.spotify.com/embed/track/5l6GqSxplqnZbLg0LTPQeG'},
+  {letter:'E',url:'https://open.spotify.com/embed/track/04S1pkp1VaIqjg8zZqknR5'},
+  {letter:'M',url:'https://open.spotify.com/embed/track/7G0gBu6nLdhFDPRLc0HdDG'},
+  {letter:'Y',url:'https://open.spotify.com/embed/track/4D7BCuvgdJlYvlX5WlN54t'},
+  {letter:'V',url:'https://open.spotify.com/embed/track/1xwAWUI6Dj0WGC3KiUPN0O'},
+  {letter:'A',url:'https://open.spotify.com/embed/track/5enxwA8aAbwZbf5qCHORXi'},
+  {letter:'L',url:'https://open.spotify.com/embed/track/1dGr1c8CrMLDpV6mPbImSI'},
+  {letter:'E',url:'https://open.spotify.com/embed/track/7qEUFOVcxRI19tbT68JcYK'},
+  {letter:'N',url:'https://open.spotify.com/embed/track/0qAIiGFKLdV1xpNlEhjpq8'},
+  {letter:'T',url:'https://open.spotify.com/embed/track/2TF4UtYreqNbQ6Z9AccldU'},
+  {letter:'I',url:'https://open.spotify.com/embed/track/6VsvKPJ4xjVNKpI8VVZ3SV'},
+  {letter:'N',url:'https://open.spotify.com/embed/track/2EFZ9emtKWEglWUQGEQ3P9'},
+  {letter:'E',url:'https://open.spotify.com/embed/track/4pvb0WLRcMtbPGmtejJJ6y'}
+];
+
+function openMusic(){
+  document.getElementById("musicSection").style.display="none";
+  document.getElementById("valentineSection").classList.remove("hidden");
+
+  const lettersContainer=document.getElementById("letters");
+  lettersData.forEach((d,index)=>{
+    const li=document.createElement("li");
+    li.innerText=d.letter;
+    li.dataset.index=index;
+    li.onclick = () => {
+      document.getElementById("spotifyPlayer").src = d.url;
+      li.classList.add("active");
+
+      // Spawn tulip
+      const t = document.createElement("div");
+      t.className = "tulip";
+      t.innerText = "🌷";
+      t.style.left = Math.random() * 90 + "vw";
+      t.style.bottom = "0px";
+      t.style.fontSize = (20 + Math.random() * 15) + "px";
+      document.getElementById("flowerContainer").appendChild(t);
+
+      let progress = 0;
+      const interval = setInterval(() => {
+        progress += 0.02;
+        t.style.bottom = progress * (50 + Math.random()*50) + "vh";
+        t.style.left = parseFloat(t.style.left) + Math.sin(progress * Math.PI * 2) * 5 + "vw";
+        t.style.transform = `rotate(${progress*360}deg) scale(${1+progress*0.3})`;
+        if(progress >= 1){ clearInterval(interval); setTimeout(()=>t.remove(),2000);}
+      },30);
+    };
+    lettersContainer.appendChild(li);
+  });
+
+  // Load photos dynamically
+  const gallery = document.getElementById("photoGallery");
+  const photoCount = 6; // Number of photos you will add to images/ folder
+  for(let i=1;i<=photoCount;i++){
+    const img = document.createElement("img");
+    img.src = `images/photo${i}.jpg`; // Place photos as photo1.jpg, photo2.jpg, ...
+    img.alt = "Our photo";
+    gallery.appendChild(img);
+  }
+}
+
+function sayYes(){
+  document.querySelector(".no")?.remove();
+  document.getElementById("noMsg")?.remove();
+  document.body.classList.add("tangled");
+  document.querySelectorAll(".tulip").forEach(t=>t.remove());
+
+  // Tangled floating flowers
+  for(let i=0;i<50;i++){
+    const f=document.createElement("div");
+    f.className="tangledFlower";
+    f.style.left=(Math.random()*90+5)+"%";
+    f.style.fontSize=(14+Math.random()*28)+"px";
+    f.innerText="🌼";
+    document.getElementById("flowerContainer").appendChild(f);
+    setTimeout(()=>f.remove(),8000 + Math.random()*3000);
+  }
+
+  document.getElementById("response").innerHTML = `
+    <div>I'm so happy to be your Valentine! 💛</div>
+    <div>I appreciate you so much, my love! 💖</div>
+    <div style="margin-top:10px;">— <span id="yourName">lover</span> 💛</div>
+  `;
+
+  document.getElementById("spotifyPlayer").src="https://open.spotify.com/embed/track/6klpXs2uAjagnZMFkt4qkl?si=1d35354cff4845a3";
+}
+
+function moveNo(){
+  const btn=document.querySelector(".no");
+  btn.style.transform=`translate(${Math.random()*160-80}px, ${Math.random()*60-30}px)`;
+  const msgs=["Pretty please? 💛","Don't be mean!","Come on, say yes!","It'll be fun 💖"];
+  document.getElementById("noMsg").innerText=msgs[Math.floor(Math.random()*msgs.length)];
+}
+
+document.getElementById("questionMark").onclick = () => {
+  for(let i=0;i<30;i++){
+    const sparkle = document.createElement("div");
+    sparkle.className="tangledFlower";
+    sparkle.style.left=(Math.random()*90+5)+"%";
+    sparkle.style.fontSize=(14+Math.random()*28)+"px";
+    sparkle.innerText="✨";
+    document.getElementById("flowerContainer").appendChild(sparkle);
+    setTimeout(()=>sparkle.remove(),4000+Math.random()*2000);
+  }
+  for(let i=0;i<10;i++){
+    const fire=document.createElement("div");
+    fire.className="tangledFlower";
+    fire.style.left=(Math.random()*100)+"%";
+    fire.style.fontSize=(10+Math.random()*20)+"px";
+    fire.innerText="💛";
+    document.getElementById("flowerContainer").appendChild(fire);
+    setTimeout(()=>fire.remove(),5000+Math.random()*2000);
+  }
+}
+
+createCinematicLanterns(30);
+</script>
+</body>
+</html>
